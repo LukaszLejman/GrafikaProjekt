@@ -149,8 +149,8 @@ int main(int argc, char ** argv)
 	glutInit(&argc, argv);
 	glutInitDisplayMode(GLUT_DEPTH | GLUT_DOUBLE | GLUT_RGBA);
 	glutInitWindowPosition(200, 200);
-	glutInitWindowSize(600, 600);
-	glutCreateWindow("OpenGL Pierwszy Program");
+	glutInitWindowSize(900, 900);
+	glutCreateWindow("OpenGL Uk³ad S³oneczny");
 	glewInit();
 
 	init();
