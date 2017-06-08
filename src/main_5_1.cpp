@@ -12,6 +12,7 @@
 
 GLuint programColor;
 GLuint programTexture;
+GLuint textureSun;
 GLuint textureEarth;
 GLuint textureJupiter;
 GLuint textureMars;
@@ -108,8 +109,9 @@ void renderScene()
 	glm::mat4 shipModelMatrix = glm::translate(cameraPos + cameraDir * 0.5f + glm::vec3(0,-0.25f,0)) * glm::rotate(-cameraAngle + glm::radians(90.0f), glm::vec3(0,1,0)) * glm::scale(glm::vec3(0.25f));
 	drawObjectColor(&shipModel, shipModelMatrix, glm::vec3(0.6f));
 
-	drawObjectTexture(&sphereModel, glm::translate(glm::vec3(1, 0, 1)), textureVenus);
-	drawObjectTexture(&sphereModel, glm::translate(glm::vec3(0, 0, 0)), textureMars);
+	drawObjectTexture(&sphereModel, glm::translate(glm::vec3(2, 0, 2)), textureVenus);
+	drawObjectTexture(&sphereModel, glm::translate(glm::vec3(1, 0, 1)), textureMars);
+	drawObjectTexture(&sphereModel, glm::translate(glm::vec3(0, 0, 0)), textureSun);
 	drawObjectTexture(&sphereModel, glm::translate(glm::vec3(-1, 0, -1)), textureJupiter);
 	drawObjectTexture(&sphereModel, glm::translate(glm::vec3(-2, 0, -2)), textureEarth);
 
@@ -126,6 +128,7 @@ void init()
 
 	textureVenus = Core::LoadTexture("textures/venus.png");
 	textureMars = Core::LoadTexture("textures/mars.png");
+	textureSun = Core::LoadTexture("textures/sun.png");
 	textureJupiter = Core::LoadTexture("textures/jupiter.png");
 	textureEarth = Core::LoadTexture("textures/earth.png");
 }
