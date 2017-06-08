@@ -30,6 +30,7 @@ glm::vec3 cameraDir;
 glm::mat4 cameraMatrix, perspectiveMatrix;
 
 glm::vec3 lightDir = glm::normalize(glm::vec3(1.0f, -0.9f, -1.0f));
+float angle = 0;
 
 void keyboard(unsigned char key, int x, int y)
 {
@@ -94,8 +95,15 @@ void drawObjectTexture(obj::Model * model, glm::mat4 modelMatrix, GLuint tex)
 	glUseProgram(0);
 }
 
+
+
 void renderScene()
 {
+	angle += 0.01;
+	if (angle >= 360)
+	{
+		angle = 0;
+	}
 	// Aktualizacja macierzy widoku i rzutowania. Macierze sa przechowywane w zmiennych globalnych, bo uzywa ich funkcja drawObject.
 	// (Bardziej elegancko byloby przekazac je jako argumenty do funkcji, ale robimy tak dla uproszczenia kodu.
 	//  Jest to mozliwe dzieki temu, ze macierze widoku i rzutowania sa takie same dla wszystkich obiektow!)
@@ -108,13 +116,19 @@ void renderScene()
 	// Macierz statku "przyczepia" go do kamery. Warto przeanalizowac te linijke i zrozumiec jak to dziala.
 	glm::mat4 shipModelMatrix = glm::translate(cameraPos + cameraDir * 0.5f + glm::vec3(0, -0.25f, 0)) * glm::rotate(-cameraAngle + glm::radians(90.0f), glm::vec3(0, 1, 0)) * glm::scale(glm::vec3(0.25f));
 	drawObjectColor(&shipModel, shipModelMatrix, glm::vec3(0.6f));
-	glm::mat4 MarsModelMatrix = glm::translate(glm::vec3(0, 0, 0)) * glm::rotate(glm::radians(90.0f), glm::vec3(0, 1, 0)) * glm::scale(glm::vec3(0.25f));
 
-	drawObjectTexture(&sphereModel, glm::translate(glm::vec3(1, 0, 1)), textureVenus);
-	drawObjectTexture(&sphereModel, glm::translate(glm::vec3(3, 0, 0)), textureSun);
+	glm::mat4 MarsModelMatrix = glm::translate(glm::vec3(8, 0, 8)) * glm::rotate(angle, glm::vec3(0, 1, 0)) * glm::scale(glm::vec3(0.50f));
+	glm::mat4 VenusModelMatrix = glm::translate(glm::vec3(3, 0, 3)) * glm::rotate(angle, glm::vec3(0, 1, 0)) * glm::scale(glm::vec3(3.0f));
+	glm::mat4 SunModelMatrix = glm::translate(glm::vec3(0, 0, 0)) *glm::scale(glm::vec3(4.0f));
+	glm::mat4 JupiterModelMatrix = glm::translate(glm::vec3(13, 0, 13)) * glm::rotate(angle, glm::vec3(0, 1, 0)) * glm::scale(glm::vec3(2.0f));
+	glm::mat4 EarthModelMatrix = glm::translate(glm::vec3(5, 0, 5)) *glm::rotate(angle, glm::vec3(0, 1, 0));
+
+	drawObjectTexture(&sphereModel, SunModelMatrix, textureSun);
+	drawObjectTexture(&sphereModel, VenusModelMatrix, textureVenus);
+	drawObjectTexture(&sphereModel, EarthModelMatrix, textureEarth);
 	drawObjectTexture(&sphereModel, MarsModelMatrix, textureMars);
-	drawObjectTexture(&sphereModel, glm::translate(glm::vec3(-1, 0, -1)), textureJupiter);
-	drawObjectTexture(&sphereModel, glm::translate(glm::vec3(-2, 0, -2)), textureEarth);
+	drawObjectTexture(&sphereModel, JupiterModelMatrix, textureJupiter);
+
 
 	glutSwapBuffers();
 }
@@ -149,8 +163,8 @@ int main(int argc, char ** argv)
 	glutInit(&argc, argv);
 	glutInitDisplayMode(GLUT_DEPTH | GLUT_DOUBLE | GLUT_RGBA);
 	glutInitWindowPosition(200, 200);
-	glutInitWindowSize(900, 900);
-	glutCreateWindow("OpenGL Uk³ad S³oneczny");
+	glutInitWindowSize(600, 600);
+	glutCreateWindow("OpenGL Pierwszy Program");
 	glewInit();
 
 	init();
