@@ -17,6 +17,7 @@ GLuint textureSun;
 GLuint textureJupiter;
 GLuint textureMars;
 GLuint textureVenus;
+GLuint textureMoon;
 
 Core::Shader_Loader shaderLoader;
 
@@ -61,6 +62,8 @@ void keyboard(unsigned char key, int x, int y)
 	{
 	case 'z': cameraAngle -= angleSpeed; break;
 	case 'x': cameraAngle += angleSpeed; break;
+	case 'q': cameraPos -= angleSpeed; break;
+	case 'e': cameraPos += angleSpeed; break;
 	case 'w': cameraPos += cameraDir * moveSpeed; break;
 	case 's': cameraPos -= cameraDir * moveSpeed; break;
 	case 'd': cameraPos += glm::cross(cameraDir, glm::vec3(0, 1, 0)) * moveSpeed; break;
@@ -202,12 +205,12 @@ void renderScene()
 	perspectiveMatrix = Core::createPerspectiveMatrix();
 
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	glClearColor(0.0f, 0.3f, 0.3f, 1.0f);
+	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 	// Macierz statku "przyczepia" go do kamery. Warto przeanalizowac te linijke i zrozumiec jak to dziala.
 	glm::mat4 shipModelMatrix = glm::translate(cameraPos + cameraDir * 0.5f + glm::vec3(0, -0.25f, 0)) * glm::rotate(-cameraAngle + glm::radians(90.0f), glm::vec3(0, 1, 0)) * glm::scale(glm::vec3(0.001f));
 	drawObjectColor(&shipModel, shipModelMatrix, glm::vec3(0.6f));
 
-	glm::mat4 SunModelMatrix = glm::translate(glm::vec3(0, 0, 0)) *glm::scale(glm::vec3(4.0f));
+	glm::mat4 SunModelMatrix = glm::translate(glm::vec3(0, 0, 0)) *glm::scale(glm::vec3(4.0f)) * glm::rotate(spin(0.001), glm::vec3(0, 1, 0));
 	glm::mat4 VenusModelMatrix = glm::translate(glm::vec3(VenusX, 0, VenusY)) * glm::rotate(spin(0.001), glm::vec3(0, 1, 0)) * glm::scale(glm::vec3(2.0f));
 	glm::mat4 MarsModelMatrix = glm::translate(glm::vec3(MarsX, 0, MarsY)) * glm::rotate(spin(0.001), glm::vec3(0, 1, 0)) * glm::scale(glm::vec3(1.50f));
 	glm::mat4 EarthModelMatrix = glm::translate(glm::vec3(EarthX, 0, EarthY)) *glm::rotate(spin(0.001), glm::vec3(0, 1, 0));
@@ -217,7 +220,7 @@ void renderScene()
 	drawObjectTexture(&sphereModel, SunModelMatrix, textureSun);
 	drawObjectTexture(&sphereModel, VenusModelMatrix, textureVenus);
 	drawObjectTexture(&sphereModel, EarthModelMatrix, textureEarth);
-	drawObjectTexture(&sphereModel, MoonModelMatrix, textureEarth);
+	drawObjectTexture(&sphereModel, MoonModelMatrix, textureMoon);
 	drawObjectTexture(&sphereModel, MarsModelMatrix, textureMars);
 	drawObjectTexture(&sphereModel, JupiterModelMatrix, textureJupiter);
 
@@ -236,7 +239,8 @@ void init()
 	textureVenus = Core::LoadTexture("textures/venus.png");
 	textureMars = Core::LoadTexture("textures/mars.png");
 	textureJupiter = Core::LoadTexture("textures/jupiter.png");
-	textureEarth = Core::LoadTexture("textures/earth.png");
+	textureEarth = Core::LoadTexture("textures/earth2.png");
+	textureMoon = Core::LoadTexture("textures/moon.png");
 }
 
 void shutdown()

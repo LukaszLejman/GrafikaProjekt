@@ -1,0 +1,30 @@
+1. Na ostatnie zajêcia nale¿y przygotowaæ projekt, opieraj¹c siê na kodzie pisanym na æwiczeniach. Projekt nale¿y zaprezentowaæ na rzutniku i bardzo krótko o nim opowiedzieæ - w szczególnoœci o wybranej funkcjonalnoœci dodatkowej, która zosta³a zaimplementowana. Nale¿y byæ równie¿ gotowym do pokazania kodu i odpowiedzi na pytania dotycz¹ce projektu i kodu (np. proszê pokazaæ, jakie elementy kodu C++ i shaderów odpowiadaj¹ za dan¹ funkcjonalnoœæ / proszê wyjaœniæ jak dzia³a dany kawa³ek kodu).
+
+2. Opcjonalnie mo¿na przygotowaæ kilka slajdów w Powerpoint, np. je¿eli ktoœ wykorzysta³ jakiœ ciekawy algorytm/równanie przy implementacji dodatkowego efektu/funkcjonalnoœci i chcia³by o tym opowiedzieæ.
+
+3. Od wymagania podanego w wyk³adzie "Wszystkie wielok¹ty s¹ teksturowane, Wszystkie wielok¹ty s¹ oœwietlone" mog¹ byæ wyj¹tki - np. jeœli chce siê zrobiæ gwiazdê bêd¹c¹ Ÿród³em œwiat³a w scenie, to najprawdopodobniej najlepiej narysowaæ j¹ bez oœwietlenia i w jednolitym bia³ym kolorze.
+
+4. 30 linijek dokumentacji to równie¿ trochê za du¿o. Wystarczy wymieniæ jakie efekty/funkcjonalnoœci zosta³y zrealizowane, w jaki sposób zrealizowano dodatkowy efekt (z listy poni¿ej) i kto w grupie odpowiada³ za które elementy.
+
+5. Pierwszy krok przy tworzeniu projektu, to zrealizowanie w³asnej sceny - dodaæ wiêcej planet/gwiazd, u³o¿yæ je w ciekawy sposób (np. uk³ad planetarny), znaleŸæ dla nich ³adne tekstury, mo¿e zmodyfikowaæ trochê sterowanie statku, aby wygodniej siê nim porusza³o.
+
+6. Drugi krok to zrealizowanie jednego dodatkowego efektu/funkcjonalnoœci. Oto pe³niejsza lista proponowanych efektów dodatkowych. W³asne pomys³y albo odstêpstwa od tej listy proszê konsultowaæ ze mn¹. W szczególnoœci zaproponowany na wyk³adzie efekt "ciekawa scena" jest na tyle nieprecyzyjny, ¿e równie¿ proszê pomys³y z nim zwi¹zane skonsultowaæ.
+
+- Normal mapping - ¿eby to zrealizowaæ, potrzebne s¹ wektory styczne dla wierzcho³ków (tzw. ramka styczna normal-tangent-bitangent jest potrzebna, aby przekszta³ciæ wektor normalny z przestrzeni tekstury do przestrzeni œwiata). Biblioteka, której u¿ywamy ³aduje tylko pliki .obj, w których nie ma wektorów stycznych. Nale¿a³oby je wiêc obliczyæ rêcznie w kodzie C++ albo w shaderze.
+
+- Environment mapping - tu trzeba znaleŸæ ciekaw¹ teksturê szeœcienn¹ - tzw. cubemap - i za³adowaæ j¹ do tekstury odpowiedniego typu. Ta czêœæ mo¿e byæ uci¹¿liwa (trzeba pomocowaæ siê z zawi³oœciami OpenGL), ale jak to siê uda, to sam algorytm w shaderze jest bardzo prosty.
+
+- Teksturowanie proceduralne - np. tu mo¿na poszukaæ inspiracji: http://luthuli.cs.uiuc.edu/~daf/courses/computergraphics/week8/shading.pdf . Niekoniecznie trzeba u¿ywaæ szumu Perlina, ale jednak trzeba siê trochê postaraæ - np. takie zwyczajne paski wzd³u¿ jednej osi jak pokazane na wyk³adzie i æwiczeniach nr 5 to oczywiœcie za ma³o.
+
+- Triplanar mapping / triplanar texturing (wyguglowaæ)
+
+- Œwiat³a punktowe - na zajêciach robiliœmy tylko œwiat³o kierunkowe, symuluj¹ce bardzo dalekie Ÿród³o œwiat³a. ¯eby zrobiæ œwiêc¹ce S³oñce, wokó³ którego krêc¹ siê pozosta³e planety, potrzebne s¹ œwiat³a punktowe - posiadaj¹ce okreœlon¹ pozycjê w scenie. Jest to niewielka modyfikacja w stosunku do œwiat³a kierunkowego. Dodatkowo nale¿y dodaæ wygaszanie mocy œwiat³a wraz z odleg³oœci¹ (falloff), mo¿liwoœæ ustawienia koloru œwiat³a, oraz mo¿liwoœæ umieszczenia w scenie przynajmniej dwóch Ÿróde³ œwiat³a (czyli trzeba stworzyæ dwa zestawy zmiennych uniform dla dwóch œwiate³, obliczyæ w shaderze oœwietlenie z obu œwiate³ osobno i zsumowaæ je).
+
+- Statek ma broñ (z obrotem) - mo¿na przyczepiæ do statku jak¹œ rurkê/lufê, któr¹ mo¿na obracaæ u¿ywaj¹c dwóch kolejnych klawiszy. Trzeci klawisz to strza³ - ma powodowaæ pojawienie siê pocisku (np. ma³a kulka), który porusza siê w kierunku, w który by³a skierowana lufy w momencie strza³u
+
+- Statek ma broñ (z kolizjami) - podobnie jak poprzednio, ale nie trzeba robiæ obrotowej lufy - pociski po prostu pojawiaj¹ siê w okolicy dziobu statku i poruszaj¹ siê do przodu. Zamiast tego obliczaæ kolizjê lec¹cych pocisków z planetami (np. niech pocisk albo planeta znika w momencie trafienia)
+
+- Ruch w 3D - umo¿liwiæ poruszanie statkiem w pe³nych 3 wymiarach (tak jak tu: https://www.youtube.com/watch?v=W4tzbK0eGbQ ). Z regu³y robi siê to przy u¿yciu kwaternionów, ale bawi¹c siê znanymi nam ju¿ macierzami obrotów równie¿ mo¿na uzyskaæ podobny efekt.
+
+- Sk³adanie macierzy transformacji - zrealizowaæ porz¹dnie zagadnienie, które przewija³o siê od pocz¹tku zajêæ, ale nigdy nie spêdziliœmy nad tym wystarczaj¹co du¿o czasu. Nale¿y opanowaæ technikê sk³adania transformacji i stworzyæ uk³ad planet, w którym: a) jest centralna gwiazda, która siê porusza po scenie, b) wokó³ gwiazdy po ko³owych orbitach poruszaj¹ siê planety, c) wokó³ przynajmniej jednej z planet poruszaj¹ siê ksiê¿yce, d) planety i ksiê¿yce, oprócz tego ¿e orbituj¹ wokó³ wiêkszego cia³a, mog¹ niezale¿nie obracaæ siê wokó³ w³asnej osi.
+Ca³oœæ nale¿y zrealizowaæ u¿ywaj¹c macierzy transformacji obiektów nadrzêdnych do animacji ruchu obiektów podrzêdnych - np. ostateczna macierz transformacji planety musi byæ iloczynem macierzy transformacji centralnej gwiazdy i macierzy, która okreœla transformacjê planety WZGLÊDEM gwiazdy.

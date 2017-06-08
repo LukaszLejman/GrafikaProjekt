@@ -1,25 +1,2 @@
-﻿  main_5_1.cpp
-src\main_5_1.cpp(183): warning C4305: 'argument': truncation from 'double' to 'float'
-src\main_5_1.cpp(184): warning C4305: 'argument': truncation from 'double' to 'float'
-src\main_5_1.cpp(186): warning C4305: 'argument': truncation from 'double' to 'float'
-src\main_5_1.cpp(187): warning C4305: 'argument': truncation from 'double' to 'float'
-src\main_5_1.cpp(189): warning C4305: 'argument': truncation from 'double' to 'float'
-src\main_5_1.cpp(190): warning C4305: 'argument': truncation from 'double' to 'float'
-src\main_5_1.cpp(192): warning C4305: 'argument': truncation from 'double' to 'float'
-src\main_5_1.cpp(193): warning C4305: 'argument': truncation from 'double' to 'float'
-src\main_5_1.cpp(195): warning C4305: 'argument': truncation from 'double' to 'float'
-src\main_5_1.cpp(195): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-src\main_5_1.cpp(196): warning C4305: 'argument': truncation from 'double' to 'float'
-src\main_5_1.cpp(196): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-src\main_5_1.cpp(211): warning C4305: 'argument': truncation from 'double' to 'float'
-src\main_5_1.cpp(212): warning C4305: 'argument': truncation from 'double' to 'float'
-src\main_5_1.cpp(213): warning C4305: 'argument': truncation from 'double' to 'float'
-src\main_5_1.cpp(214): warning C4305: 'argument': truncation from 'double' to 'float'
-src\main_5_1.cpp(215): warning C4305: 'argument': truncation from 'double' to 'float'
-  Generating code
-  1 of 1485 functions ( 0.1%) were compiled, the rest were copied from previous compilation.
-    0 functions were new in current compilation
-    1 functions had inline decision re-evaluated but remain unchanged
-  Finished generating code
-  grk-cw5.vcxproj -> j:\Desktop\GrafikaProjekt\Release\grk-cw5.exe
+﻿  grk-cw5.vcxproj -> j:\Desktop\GrafikaProjekt\Release\grk-cw5.exe
   grk-cw5.vcxproj -> j:\Desktop\GrafikaProjekt\Release\grk-cw5.pdb (Full PDB)
