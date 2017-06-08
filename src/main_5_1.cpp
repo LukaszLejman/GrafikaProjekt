@@ -24,13 +24,34 @@ obj::Model shipModel;
 obj::Model sphereModel;
 
 float cameraAngle = 0;
-glm::vec3 cameraPos = glm::vec3(-5, 0, 0);
+glm::vec3 cameraPos = glm::vec3(-50, 0, 0);
 glm::vec3 cameraDir;
 
 glm::mat4 cameraMatrix, perspectiveMatrix;
 
 glm::vec3 lightDir = glm::normalize(glm::vec3(1.0f, -0.9f, -1.0f));
 float angle = 0;
+float angleV = 0;
+float angleE = 0;
+float angleM = 0;
+float angleJ = 0;
+float angleMoon = 0;
+
+float VenusX = 8;
+float VenusY = 8;
+
+float EarthX = 16;
+float EarthY = 16;
+
+float MarsX = 24;
+float MarsY = 24;
+
+float JupiterX = 32;
+float JupiterY = 32;
+
+float MoonX = 17.5;
+float MoonY = 17.5;
+
 
 void keyboard(unsigned char key, int x, int y)
 {
@@ -95,15 +116,85 @@ void drawObjectTexture(obj::Model * model, glm::mat4 modelMatrix, GLuint tex)
 	glUseProgram(0);
 }
 
-
-
-void renderScene()
+float spin(float ile)
 {
-	angle += 0.01;
+	angle += ile;
 	if (angle >= 360)
 	{
 		angle = 0;
 	}
+	return angle;
+}
+
+float spinV(float ile)
+{
+	angleV += ile;
+	if (angleV >= 360)
+	{
+		angleV = 0;
+	}
+	return angleV;
+}
+
+float spinE(float ile)
+{
+	angleE += ile;
+	if (angleE >= 360)
+	{
+		angleE = 0;
+	}
+	return angleE;
+}
+
+float spinM(float ile)
+{
+	angleM += ile;
+	if (angleM >= 360)
+	{
+		angleM = 0;
+	}
+	return angleM;
+}
+
+float spinJ(float ile)
+{
+	angleJ += ile;
+	if (angleJ >= 360)
+	{
+		angleJ = 0;
+	}
+	return angleJ;
+}
+
+float spinMoon(float ile)
+{
+	angleMoon += ile;
+	if (angleMoon >= 360)
+	{
+		angleMoon = 0;
+	}
+	return angleMoon;
+}
+
+
+void renderScene()
+{
+
+	VenusX = cos(spinV(0.003)) * 8;
+	VenusY = sin(spinV(0.003)) * 8;
+
+	EarthX = cos(spinE(0.0025)) * 16;
+	EarthY = sin(spinE(0.0025)) * 16;
+
+	MarsX = cos(spinM(0.002)) * 24;
+	MarsY = sin(spinM(0.002)) * 24;
+
+	JupiterX = cos(spinJ(0.001)) * 32;
+	JupiterY = sin(spinJ(0.001)) * 32;
+
+	MoonX = EarthX + cos(spinMoon(0.01)) * 1.5;
+	MoonY = EarthY + sin(spinMoon(0.01)) * 1.5;
+
 	// Aktualizacja macierzy widoku i rzutowania. Macierze sa przechowywane w zmiennych globalnych, bo uzywa ich funkcja drawObject.
 	// (Bardziej elegancko byloby przekazac je jako argumenty do funkcji, ale robimy tak dla uproszczenia kodu.
 	//  Jest to mozliwe dzieki temu, ze macierze widoku i rzutowania sa takie same dla wszystkich obiektow!)
@@ -112,20 +203,21 @@ void renderScene()
 
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glClearColor(0.0f, 0.3f, 0.3f, 1.0f);
-
 	// Macierz statku "przyczepia" go do kamery. Warto przeanalizowac te linijke i zrozumiec jak to dziala.
-	glm::mat4 shipModelMatrix = glm::translate(cameraPos + cameraDir * 0.5f + glm::vec3(0, -0.25f, 0)) * glm::rotate(-cameraAngle + glm::radians(90.0f), glm::vec3(0, 1, 0)) * glm::scale(glm::vec3(0.25f));
+	glm::mat4 shipModelMatrix = glm::translate(cameraPos + cameraDir * 0.5f + glm::vec3(0, -0.25f, 0)) * glm::rotate(-cameraAngle + glm::radians(90.0f), glm::vec3(0, 1, 0)) * glm::scale(glm::vec3(0.001f));
 	drawObjectColor(&shipModel, shipModelMatrix, glm::vec3(0.6f));
 
-	glm::mat4 MarsModelMatrix = glm::translate(glm::vec3(8, 0, 8)) * glm::rotate(angle, glm::vec3(0, 1, 0)) * glm::scale(glm::vec3(0.50f));
-	glm::mat4 VenusModelMatrix = glm::translate(glm::vec3(3, 0, 3)) * glm::rotate(angle, glm::vec3(0, 1, 0)) * glm::scale(glm::vec3(3.0f));
 	glm::mat4 SunModelMatrix = glm::translate(glm::vec3(0, 0, 0)) *glm::scale(glm::vec3(4.0f));
-	glm::mat4 JupiterModelMatrix = glm::translate(glm::vec3(13, 0, 13)) * glm::rotate(angle, glm::vec3(0, 1, 0)) * glm::scale(glm::vec3(2.0f));
-	glm::mat4 EarthModelMatrix = glm::translate(glm::vec3(5, 0, 5)) *glm::rotate(angle, glm::vec3(0, 1, 0));
+	glm::mat4 VenusModelMatrix = glm::translate(glm::vec3(VenusX, 0, VenusY)) * glm::rotate(spin(0.001), glm::vec3(0, 1, 0)) * glm::scale(glm::vec3(2.0f));
+	glm::mat4 MarsModelMatrix = glm::translate(glm::vec3(MarsX, 0, MarsY)) * glm::rotate(spin(0.001), glm::vec3(0, 1, 0)) * glm::scale(glm::vec3(1.50f));
+	glm::mat4 EarthModelMatrix = glm::translate(glm::vec3(EarthX, 0, EarthY)) *glm::rotate(spin(0.001), glm::vec3(0, 1, 0));
+	glm::mat4 JupiterModelMatrix = glm::translate(glm::vec3(JupiterX, 0, JupiterY)) * glm::rotate(spin(0.001), glm::vec3(0, 1, 0)) * glm::scale(glm::vec3(2.0f));
+	glm::mat4 MoonModelMatrix = glm::translate(glm::vec3(MoonX, 0, MoonY)) * glm::rotate(spin(0.001), glm::vec3(0, 1, 0)) * glm::scale(glm::vec3(0.25f));
 
 	drawObjectTexture(&sphereModel, SunModelMatrix, textureSun);
 	drawObjectTexture(&sphereModel, VenusModelMatrix, textureVenus);
 	drawObjectTexture(&sphereModel, EarthModelMatrix, textureEarth);
+	drawObjectTexture(&sphereModel, MoonModelMatrix, textureEarth);
 	drawObjectTexture(&sphereModel, MarsModelMatrix, textureMars);
 	drawObjectTexture(&sphereModel, JupiterModelMatrix, textureJupiter);
 
@@ -139,7 +231,7 @@ void init()
 	programColor = shaderLoader.CreateProgram("shaders/shader_color.vert", "shaders/shader_color.frag");
 	programTexture = shaderLoader.CreateProgram("shaders/shader_tex.vert", "shaders/shader_tex.frag");
 	sphereModel = obj::loadModelFromFile("models/sphere.obj");
-	shipModel = obj::loadModelFromFile("models/spaceship.obj");
+	shipModel = obj::loadModelFromFile("models/statek.obj");
 	textureSun = Core::LoadTexture("textures/sun.png");
 	textureVenus = Core::LoadTexture("textures/venus.png");
 	textureMars = Core::LoadTexture("textures/mars.png");
