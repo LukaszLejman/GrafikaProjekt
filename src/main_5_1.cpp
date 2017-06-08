@@ -12,7 +12,6 @@
 
 GLuint programColor;
 GLuint programTexture;
-GLuint textureSun;
 GLuint textureEarth;
 GLuint textureJupiter;
 GLuint textureMars;
@@ -35,14 +34,14 @@ void keyboard(unsigned char key, int x, int y)
 {
 	float angleSpeed = 0.1f;
 	float moveSpeed = 0.1f;
-	switch(key)
+	switch (key)
 	{
 	case 'z': cameraAngle -= angleSpeed; break;
 	case 'x': cameraAngle += angleSpeed; break;
 	case 'w': cameraPos += cameraDir * moveSpeed; break;
 	case 's': cameraPos -= cameraDir * moveSpeed; break;
-	case 'd': cameraPos += glm::cross(cameraDir, glm::vec3(0,1,0)) * moveSpeed; break;
-	case 'a': cameraPos -= glm::cross(cameraDir, glm::vec3(0,1,0)) * moveSpeed; break;
+	case 'd': cameraPos += glm::cross(cameraDir, glm::vec3(0, 1, 0)) * moveSpeed; break;
+	case 'a': cameraPos -= glm::cross(cameraDir, glm::vec3(0, 1, 0)) * moveSpeed; break;
 	}
 }
 
@@ -50,7 +49,7 @@ glm::mat4 createCameraMatrix()
 {
 	// Obliczanie kierunku patrzenia kamery (w plaszczyznie x-z) przy uzyciu zmiennej cameraAngle kontrolowanej przez klawisze.
 	cameraDir = glm::vec3(cosf(cameraAngle), 0.0f, sinf(cameraAngle));
-	glm::vec3 up = glm::vec3(0,1,0);
+	glm::vec3 up = glm::vec3(0, 1, 0);
 
 	return Core::createViewMatrix(cameraPos, cameraDir, up);
 }
@@ -80,9 +79,9 @@ void drawObjectTexture(obj::Model * model, glm::mat4 modelMatrix, GLuint tex)
 	glUseProgram(program);
 
 	//tex = textureGrid;
-	Core::SetActiveTexture(tex, "uni", program,0); //+
-	//glUniform3f(glGetUniformLocation(program, "textureColor"), tex,tex,tex);
-	//glUniform3f(glGetUniformLocation(program, "objectColor"), color.x, color.y, color.z); //-
+	Core::SetActiveTexture(tex, "uni", program, 0); //+
+													//glUniform3f(glGetUniformLocation(program, "textureColor"), tex,tex,tex);
+													//glUniform3f(glGetUniformLocation(program, "objectColor"), color.x, color.y, color.z); //-
 	glUniform3f(glGetUniformLocation(program, "lightDir"), lightDir.x, lightDir.y, lightDir.z);
 
 	glm::mat4 transformation = perspectiveMatrix * cameraMatrix * modelMatrix;
@@ -106,12 +105,13 @@ void renderScene()
 	glClearColor(0.0f, 0.3f, 0.3f, 1.0f);
 
 	// Macierz statku "przyczepia" go do kamery. Warto przeanalizowac te linijke i zrozumiec jak to dziala.
-	glm::mat4 shipModelMatrix = glm::translate(cameraPos + cameraDir * 0.5f + glm::vec3(0,-0.25f,0)) * glm::rotate(-cameraAngle + glm::radians(90.0f), glm::vec3(0,1,0)) * glm::scale(glm::vec3(0.25f));
+	glm::mat4 shipModelMatrix = glm::translate(cameraPos + cameraDir * 0.5f + glm::vec3(0, -0.25f, 0)) * glm::rotate(-cameraAngle + glm::radians(90.0f), glm::vec3(0, 1, 0)) * glm::scale(glm::vec3(0.25f));
 	drawObjectColor(&shipModel, shipModelMatrix, glm::vec3(0.6f));
+	glm::mat4 sphereModelMatrix = glm::translate(glm::vec3(0, -0.25f, 0)) * glm::rotate(glm::radians(90.0f), glm::vec3(0, 1, 0)) * glm::scale(glm::vec3(0.25f));
 
-	drawObjectTexture(&sphereModel, glm::translate(glm::vec3(2, 0, 2)), textureVenus);
-	drawObjectTexture(&sphereModel, glm::translate(glm::vec3(1, 0, 1)), textureMars);
-	drawObjectTexture(&sphereModel, glm::translate(glm::vec3(0, 0, 0)), textureSun);
+	drawObjectTexture(&sphereModel, glm::translate(glm::vec3(1, 0, 1)), textureVenus);
+
+	drawObjectTexture(&sphereModel, sphereModelMatrix, textureMars);
 	drawObjectTexture(&sphereModel, glm::translate(glm::vec3(-1, 0, -1)), textureJupiter);
 	drawObjectTexture(&sphereModel, glm::translate(glm::vec3(-2, 0, -2)), textureEarth);
 
@@ -128,7 +128,6 @@ void init()
 
 	textureVenus = Core::LoadTexture("textures/venus.png");
 	textureMars = Core::LoadTexture("textures/mars.png");
-	textureSun = Core::LoadTexture("textures/sun.png");
 	textureJupiter = Core::LoadTexture("textures/jupiter.png");
 	textureEarth = Core::LoadTexture("textures/earth.png");
 }
