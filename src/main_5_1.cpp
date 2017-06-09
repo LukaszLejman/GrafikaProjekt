@@ -27,8 +27,9 @@ Core::Shader_Loader shaderLoader;
 
 obj::Model shipModel;
 obj::Model sphereModel;
-
+float cameraMove = 1;
 float cameraAngle = 0;
+float cameraRotate = 0;
 glm::vec3 cameraPos = glm::vec3(-100, 0, 0);
 glm::vec3 cameraDir;
 
@@ -55,14 +56,20 @@ void keyboard(unsigned char key, int x, int y)
 	float moveSpeed = 0.3f;
 	switch (key)
 	{
-	case 'z': cameraAngle -= angleSpeed; break;
-	case 'x': cameraAngle += angleSpeed; break;
-	case 'q': cameraPos -= angleSpeed; break;
-	case 'e': cameraPos += angleSpeed; break;
-	case 'w': cameraPos += cameraDir * moveSpeed; break;
-	case 's': cameraPos -= cameraDir * moveSpeed; break;
-	case 'd': cameraPos += glm::cross(cameraDir, glm::vec3(0, 1, 0)) * moveSpeed; break;
-	case 'a': cameraPos -= glm::cross(cameraDir, glm::vec3(0, 1, 0)) * moveSpeed; break;
+		case 'z': cameraAngle -= angleSpeed; break;
+		case 'x': cameraAngle += angleSpeed; break;
+		case 'q': cameraPos -= angleSpeed; break;
+		case 'e': cameraPos += angleSpeed; break;
+		case 'w': cameraPos += cameraDir * moveSpeed; break;
+		case 's': cameraPos -= cameraDir * moveSpeed; break;
+		case 'd': cameraPos += glm::cross(cameraDir, glm::vec3(0, 1, 0)) * moveSpeed; break;
+		case 'a': cameraPos -= glm::cross(cameraDir, glm::vec3(0, 1, 0)) * moveSpeed; break;
+		case 'p': cameraPos += glm::cross(cameraDir, glm::vec3(1, 0, 1)) * moveSpeed; break;
+		case 'o': cameraPos -= glm::cross(cameraDir, glm::vec3(1, 0, 1)) * moveSpeed; break;
+		case 't': cameraMove -= angleSpeed; break;
+		case 'y': cameraMove += angleSpeed; break;
+		case 'c': cameraRotate += angleSpeed; break;
+		case 'v': cameraRotate -= angleSpeed; break;
 	}
 }
 
@@ -143,7 +150,7 @@ void renderScene()
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 	// Macierz statku "przyczepia" go do kamery. Warto przeanalizowac te linijke i zrozumiec jak to dziala.
-	glm::mat4 shipModelMatrix = glm::translate(cameraPos + cameraDir * 0.5f + glm::vec3(0, -0.25f, 0)) * glm::rotate(-cameraAngle + glm::radians(90.0f), glm::vec3(0, 1, 0)) * glm::scale(glm::vec3(0.001f));
+	glm::mat4 shipModelMatrix = glm::translate(cameraPos + cameraMove*cameraDir * 0.5f + glm::vec3(0, -0.25f, 0)) * glm::rotate(-cameraAngle + cameraRotate + glm::radians(90.0f), glm::vec3(0, 1, 0)) * glm::scale(glm::vec3(0.001f));
 	drawObjectColor(&shipModel, shipModelMatrix, glm::vec3(0.6f));
 
 	glm::mat4 SunModelMatrix = glm::translate(sunXYZ)* glm::scale(glm::vec3(5.0f));
