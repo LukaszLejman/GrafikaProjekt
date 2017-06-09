@@ -1,8 +1,8 @@
 ﻿  main_5_1.cpp
   Generating code
-  0 of 1496 functions ( 0.0%) were compiled, the rest were copied from previous compilation.
+  25 of 1498 functions ( 1.7%) were compiled, the rest were copied from previous compilation.
     0 functions were new in current compilation
-    0 functions had inline decision re-evaluated but remain unchanged
+    2 functions had inline decision re-evaluated but remain unchanged
   Finished generating code
   grk-cw5.vcxproj -> C:\Users\lukas\Desktop\GrafikaProjekt\Release\grk-cw5.exe
   grk-cw5.vcxproj -> C:\Users\lukas\Desktop\GrafikaProjekt\Release\grk-cw5.pdb (Full PDB)
