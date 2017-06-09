@@ -14,10 +14,14 @@ GLuint programColor;
 GLuint programTexture;
 GLuint textureEarth;
 GLuint textureSun;
+GLuint textureMerkury;
 GLuint textureJupiter;
 GLuint textureMars;
 GLuint textureVenus;
 GLuint textureMoon;
+GLuint textureSaturn;
+GLuint textureUranus;
+GLuint textureNeptune;
 
 Core::Shader_Loader shaderLoader;
 
@@ -25,7 +29,7 @@ obj::Model shipModel;
 obj::Model sphereModel;
 
 float cameraAngle = 0;
-glm::vec3 cameraPos = glm::vec3(-50, 0, 0);
+glm::vec3 cameraPos = glm::vec3(-100, 0, 0);
 glm::vec3 cameraDir;
 
 glm::mat4 cameraMatrix, perspectiveMatrix;
@@ -37,12 +41,19 @@ float angleE = 0;
 float angleM = 0;
 float angleJ = 0;
 float angleMoon = 0;
+glm::vec3 sunXYZ;
+glm::vec3 merkuryXYZ;
+glm::vec3 venusXYZ;
+glm::vec3 earthXYZ;
+glm::vec3 moonXYZ;
+glm::vec3 marsXYZ;
+glm::vec3 jupiterXYZ;
+glm::vec3 saturnXYZ;
+glm::vec3 saturnRingXYZ;
+glm::vec3 saturnRing2XYZ;
+glm::vec3 uranusXYZ;
+glm::vec3 neptuneXYZ;
 
-float VenusX = 8;
-float VenusY = 8;
-
-float EarthX = 16;
-float EarthY = 16;
 
 float MarsX = 24;
 float MarsY = 24;
@@ -57,7 +68,7 @@ float MoonY = 17.5;
 void keyboard(unsigned char key, int x, int y)
 {
 	float angleSpeed = 0.1f;
-	float moveSpeed = 0.1f;
+	float moveSpeed = 0.3f;
 	switch (key)
 	{
 	case 'z': cameraAngle -= angleSpeed; break;
@@ -119,84 +130,37 @@ void drawObjectTexture(obj::Model * model, glm::mat4 modelMatrix, GLuint tex)
 	glUseProgram(0);
 }
 
-float spin(float ile)
-{
-	angle += ile;
-	if (angle >= 360)
-	{
-		angle = 0;
-	}
-	return angle;
-}
-
-float spinV(float ile)
-{
-	angleV += ile;
-	if (angleV >= 360)
-	{
-		angleV = 0;
-	}
-	return angleV;
-}
-
-float spinE(float ile)
-{
-	angleE += ile;
-	if (angleE >= 360)
-	{
-		angleE = 0;
-	}
-	return angleE;
-}
-
-float spinM(float ile)
-{
-	angleM += ile;
-	if (angleM >= 360)
-	{
-		angleM = 0;
-	}
-	return angleM;
-}
-
-float spinJ(float ile)
-{
-	angleJ += ile;
-	if (angleJ >= 360)
-	{
-		angleJ = 0;
-	}
-	return angleJ;
-}
-
-float spinMoon(float ile)
-{
-	angleMoon += ile;
-	if (angleMoon >= 360)
-	{
-		angleMoon = 0;
-	}
-	return angleMoon;
-}
-
 
 void renderScene()
 {
 
-	VenusX = cos(spinV(0.003)) * 8;
-	VenusY = sin(spinV(0.003)) * 8;
+	float time = glutGet(GLUT_ELAPSED_TIME) / 5000.0f;
+	sunXYZ = glm::vec3(0, 0, cos(time) * 30);
 
-	EarthX = cos(spinE(0.0025)) * 16;
-	EarthY = sin(spinE(0.0025)) * 16;
+	//sunXYZ = glm::vec3(0, 0, 0);
+	merkuryXYZ = glm::vec3(cos(time*5) * 8, 0, sin(time*5) * 8);
+	venusXYZ = glm::vec3(cos(time * 4) * 12, 0, sin(time *4) * 12);
+	earthXYZ = glm::vec3(cos(time * 3) * 18, 0, sin(time * 3) * 18);
+	moonXYZ = glm::vec3(cos(time * 10) * 3, 0, sin(time * 10) * 3);
+	marsXYZ = glm::vec3(cos(time * 5) * 24, 0, sin(time * 5) * 24);
+	jupiterXYZ = glm::vec3(cos(time * 6) * 34, 0, sin(time * 6) * 34);
+	saturnXYZ = glm::vec3(cos(time * 8) * 44, 0, sin(time * 8) * 44);
+	saturnRingXYZ = glm::vec3(cos(time *100000000) * 4, 0, sin(time * 100000000) * 4);
+	saturnRing2XYZ = glm::vec3(cos(time * 10000000000) * 4, 0, sin(time * 10000000000) * 4);
+	uranusXYZ = glm::vec3(cos(time * 7) * 53, 0, sin(time * 7) * 53);
+	neptuneXYZ = glm::vec3(cos(time * 7.5) * 58, 0, sin(time * 7.5) * 58);
 
-	MarsX = cos(spinM(0.002)) * 24;
-	MarsY = sin(spinM(0.002)) * 24;
+	//EarthX = cos(spinE(0.0025)) * 16;
+	//EarthY = sin(spinE(0.0025)) * 16;
 
-	JupiterX = cos(spinJ(0.001)) * 32;
-	JupiterY = sin(spinJ(0.001)) * 32;
+	//MarsX = cos(spinM(0.002)) * 24;
+	//MarsY = sin(spinM(0.002)) * 24;
 
-	MoonX = EarthX + cos(spinMoon(0.01)) * 1.5;
-	MoonY = EarthY + sin(spinMoon(0.01)) * 1.5;
+	//JupiterX = cos(spinJ(0.001)) * 32;
+	//JupiterY = sin(spinJ(0.001)) * 32;
+
+	//MoonX = EarthX + cos(spinMoon(0.01)) * 1.5;
+	//MoonY = EarthY + sin(spinMoon(0.01)) * 1.5;
 
 	// Aktualizacja macierzy widoku i rzutowania. Macierze sa przechowywane w zmiennych globalnych, bo uzywa ich funkcja drawObject.
 	// (Bardziej elegancko byloby przekazac je jako argumenty do funkcji, ale robimy tak dla uproszczenia kodu.
@@ -210,19 +174,37 @@ void renderScene()
 	glm::mat4 shipModelMatrix = glm::translate(cameraPos + cameraDir * 0.5f + glm::vec3(0, -0.25f, 0)) * glm::rotate(-cameraAngle + glm::radians(90.0f), glm::vec3(0, 1, 0)) * glm::scale(glm::vec3(0.001f));
 	drawObjectColor(&shipModel, shipModelMatrix, glm::vec3(0.6f));
 
-	glm::mat4 SunModelMatrix = glm::translate(glm::vec3(0, 0, 0)) *glm::scale(glm::vec3(4.0f)) * glm::rotate(spin(0.001), glm::vec3(0, 1, 0));
-	glm::mat4 VenusModelMatrix = glm::translate(glm::vec3(VenusX, 0, VenusY)) * glm::rotate(spin(0.001), glm::vec3(0, 1, 0)) * glm::scale(glm::vec3(2.0f));
-	glm::mat4 MarsModelMatrix = glm::translate(glm::vec3(MarsX, 0, MarsY)) * glm::rotate(spin(0.001), glm::vec3(0, 1, 0)) * glm::scale(glm::vec3(1.50f));
-	glm::mat4 EarthModelMatrix = glm::translate(glm::vec3(EarthX, 0, EarthY)) *glm::rotate(spin(0.001), glm::vec3(0, 1, 0));
-	glm::mat4 JupiterModelMatrix = glm::translate(glm::vec3(JupiterX, 0, JupiterY)) * glm::rotate(spin(0.001), glm::vec3(0, 1, 0)) * glm::scale(glm::vec3(2.0f));
-	glm::mat4 MoonModelMatrix = glm::translate(glm::vec3(MoonX, 0, MoonY)) * glm::rotate(spin(0.001), glm::vec3(0, 1, 0)) * glm::scale(glm::vec3(0.25f));
+	glm::mat4 SunModelMatrix = glm::translate(sunXYZ)* glm::scale(glm::vec3(5.0f));
+	glm::mat4 MerkuryModelMatrix = glm::translate(merkuryXYZ) * glm::translate(sunXYZ) * glm::rotate(time*100, glm::vec3(0, 1, 0)) * glm::scale(glm::vec3(1.0f));
+	glm::mat4 VenusModelMatrix = glm::translate(venusXYZ) * glm::translate(sunXYZ) * glm::rotate(time * 50, glm::vec3(0, 1, 0)) * glm::scale(glm::vec3(2.0f));
+	glm::mat4 EarthModelMatrix = glm::translate(earthXYZ) * glm::translate(sunXYZ) * glm::rotate(time * 40, glm::vec3(0, 1, 0)) * glm::scale(glm::vec3(2.0f));
+	glm::mat4 MoonModelMatrix = glm::translate(moonXYZ) * glm::translate(earthXYZ) * glm::translate(sunXYZ) * glm::rotate(time * 40, glm::vec3(0, 1, 0)) * glm::scale(glm::vec3(0.5f));
+	glm::mat4 MarsModelMatrix = glm::translate(marsXYZ) * glm::translate(sunXYZ) * glm::rotate(time * 30, glm::vec3(0, 1, 0)) * glm::scale(glm::vec3(1.5f));
+	glm::mat4 JupiterModelMatrix = glm::translate(jupiterXYZ) * glm::translate(sunXYZ) * glm::rotate(time * 30, glm::vec3(0, 1, 0)) * glm::scale(glm::vec3(3.0f));
+	glm::mat4 SaturnModelMatrix = glm::translate(saturnXYZ) * glm::translate(sunXYZ) * glm::rotate(time * 30, glm::vec3(0, 1, 0)) * glm::scale(glm::vec3(3.0f));
+	glm::mat4 SaturnRingModelMatrix = glm::translate(saturnRingXYZ) * glm::translate(saturnXYZ) * glm::translate(sunXYZ) * glm::rotate(time * 40, glm::vec3(0, 1, 0)) * glm::scale(glm::vec3(1.0f,0.1f,1.0f));
+	glm::mat4 SaturnRingModelMatrix2 = glm::translate(saturnRing2XYZ) * glm::translate(saturnXYZ) * glm::translate(sunXYZ) * glm::rotate(time * 40, glm::vec3(0, 1, 0)) * glm::scale(glm::vec3(1.0f, 0.1f, 1.0f));
+	glm::mat4 UranusModelMatrix = glm::translate(uranusXYZ) * glm::translate(sunXYZ) * glm::rotate(time * 30, glm::vec3(0, 1, 0)) * glm::scale(glm::vec3(1.5f));
+	glm::mat4 NeptuneModelMatrix = glm::translate(neptuneXYZ) * glm::translate(sunXYZ) * glm::rotate(time * 30, glm::vec3(0, 1, 0)) * glm::scale(glm::vec3(1.5f));
+
+	//glm::mat4 VenusModelMatrix = glm::translate(glm::vec3(VenusX, 0, VenusY)) * glm::rotate(spin(0.001), glm::vec3(0, 1, 0)) * glm::scale(glm::vec3(2.0f));
+	//glm::mat4 MarsModelMatrix = glm::translate(glm::vec3(MarsX, 0, MarsY)) * glm::rotate(spin(0.001), glm::vec3(0, 1, 0)) * glm::scale(glm::vec3(1.50f));
+	//glm::mat4 EarthModelMatrix = glm::translate(glm::vec3(EarthX, 0, EarthY)) *glm::rotate(spin(0.001), glm::vec3(0, 1, 0));
+	//glm::mat4 JupiterModelMatrix = glm::translate(glm::vec3(JupiterX, 0, JupiterY)) * glm::rotate(spin(0.001), glm::vec3(0, 1, 0)) * glm::scale(glm::vec3(2.0f));
+	//glm::mat4 MoonModelMatrix = glm::translate(glm::vec3(MoonX, 0, MoonY)) * glm::rotate(spin(0.001), glm::vec3(0, 1, 0)) * glm::scale(glm::vec3(0.25f));
 
 	drawObjectTexture(&sphereModel, SunModelMatrix, textureSun);
+	drawObjectTexture(&sphereModel, MerkuryModelMatrix, textureMerkury);
 	drawObjectTexture(&sphereModel, VenusModelMatrix, textureVenus);
 	drawObjectTexture(&sphereModel, EarthModelMatrix, textureEarth);
 	drawObjectTexture(&sphereModel, MoonModelMatrix, textureMoon);
 	drawObjectTexture(&sphereModel, MarsModelMatrix, textureMars);
 	drawObjectTexture(&sphereModel, JupiterModelMatrix, textureJupiter);
+	drawObjectTexture(&sphereModel, SaturnModelMatrix, textureSaturn);
+	drawObjectTexture(&sphereModel, SaturnRingModelMatrix, textureSaturn);
+	drawObjectTexture(&sphereModel, SaturnRingModelMatrix2, textureSaturn);
+	drawObjectTexture(&sphereModel, UranusModelMatrix, textureUranus);
+	drawObjectTexture(&sphereModel, NeptuneModelMatrix, textureNeptune);
 
 
 	glutSwapBuffers();
@@ -236,11 +218,15 @@ void init()
 	sphereModel = obj::loadModelFromFile("models/sphere.obj");
 	shipModel = obj::loadModelFromFile("models/statek.obj");
 	textureSun = Core::LoadTexture("textures/sun.png");
+	textureMerkury = Core::LoadTexture("textures/merkury.png");
 	textureVenus = Core::LoadTexture("textures/venus.png");
 	textureMars = Core::LoadTexture("textures/mars.png");
 	textureJupiter = Core::LoadTexture("textures/jupiter.png");
 	textureEarth = Core::LoadTexture("textures/earth2.png");
 	textureMoon = Core::LoadTexture("textures/moon.png");
+	textureSaturn = Core::LoadTexture("textures/saturn.png");
+	textureUranus = Core::LoadTexture("textures/uranus.png");
+	textureNeptune = Core::LoadTexture("textures/neptune.png");
 }
 
 void shutdown()
@@ -258,8 +244,8 @@ int main(int argc, char ** argv)
 {
 	glutInit(&argc, argv);
 	glutInitDisplayMode(GLUT_DEPTH | GLUT_DOUBLE | GLUT_RGBA);
-	glutInitWindowPosition(200, 200);
-	glutInitWindowSize(600, 600);
+	glutInitWindowPosition(00, 00);
+	glutInitWindowSize(900, 900);
 	glutCreateWindow("OpenGL Pierwszy Program");
 	glewInit();
 
