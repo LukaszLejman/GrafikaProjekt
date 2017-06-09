@@ -35,12 +35,6 @@ glm::vec3 cameraDir;
 glm::mat4 cameraMatrix, perspectiveMatrix;
 
 glm::vec3 lightDir = glm::normalize(glm::vec3(1.0f, -0.9f, -1.0f));
-float angle = 0;
-float angleV = 0;
-float angleE = 0;
-float angleM = 0;
-float angleJ = 0;
-float angleMoon = 0;
 glm::vec3 sunXYZ;
 glm::vec3 merkuryXYZ;
 glm::vec3 venusXYZ;
@@ -53,16 +47,6 @@ glm::vec3 saturnRingXYZ;
 glm::vec3 saturnRing2XYZ;
 glm::vec3 uranusXYZ;
 glm::vec3 neptuneXYZ;
-
-
-float MarsX = 24;
-float MarsY = 24;
-
-float JupiterX = 32;
-float JupiterY = 32;
-
-float MoonX = 17.5;
-float MoonY = 17.5;
 
 
 void keyboard(unsigned char key, int x, int y)
@@ -150,18 +134,6 @@ void renderScene()
 	uranusXYZ = glm::vec3(cos(time * 7) * 53, 0, sin(time * 7) * 53);
 	neptuneXYZ = glm::vec3(cos(time * 7.5) * 58, 0, sin(time * 7.5) * 58);
 
-	//EarthX = cos(spinE(0.0025)) * 16;
-	//EarthY = sin(spinE(0.0025)) * 16;
-
-	//MarsX = cos(spinM(0.002)) * 24;
-	//MarsY = sin(spinM(0.002)) * 24;
-
-	//JupiterX = cos(spinJ(0.001)) * 32;
-	//JupiterY = sin(spinJ(0.001)) * 32;
-
-	//MoonX = EarthX + cos(spinMoon(0.01)) * 1.5;
-	//MoonY = EarthY + sin(spinMoon(0.01)) * 1.5;
-
 	// Aktualizacja macierzy widoku i rzutowania. Macierze sa przechowywane w zmiennych globalnych, bo uzywa ich funkcja drawObject.
 	// (Bardziej elegancko byloby przekazac je jako argumenty do funkcji, ale robimy tak dla uproszczenia kodu.
 	//  Jest to mozliwe dzieki temu, ze macierze widoku i rzutowania sa takie same dla wszystkich obiektow!)
@@ -186,12 +158,6 @@ void renderScene()
 	glm::mat4 SaturnRingModelMatrix2 = glm::translate(saturnRing2XYZ) * glm::translate(saturnXYZ) * glm::translate(sunXYZ) * glm::rotate(time * 40, glm::vec3(0, 1, 0)) * glm::scale(glm::vec3(1.0f, 0.1f, 1.0f));
 	glm::mat4 UranusModelMatrix = glm::translate(uranusXYZ) * glm::translate(sunXYZ) * glm::rotate(time * 30, glm::vec3(0, 1, 0)) * glm::scale(glm::vec3(1.5f));
 	glm::mat4 NeptuneModelMatrix = glm::translate(neptuneXYZ) * glm::translate(sunXYZ) * glm::rotate(time * 30, glm::vec3(0, 1, 0)) * glm::scale(glm::vec3(1.5f));
-
-	//glm::mat4 VenusModelMatrix = glm::translate(glm::vec3(VenusX, 0, VenusY)) * glm::rotate(spin(0.001), glm::vec3(0, 1, 0)) * glm::scale(glm::vec3(2.0f));
-	//glm::mat4 MarsModelMatrix = glm::translate(glm::vec3(MarsX, 0, MarsY)) * glm::rotate(spin(0.001), glm::vec3(0, 1, 0)) * glm::scale(glm::vec3(1.50f));
-	//glm::mat4 EarthModelMatrix = glm::translate(glm::vec3(EarthX, 0, EarthY)) *glm::rotate(spin(0.001), glm::vec3(0, 1, 0));
-	//glm::mat4 JupiterModelMatrix = glm::translate(glm::vec3(JupiterX, 0, JupiterY)) * glm::rotate(spin(0.001), glm::vec3(0, 1, 0)) * glm::scale(glm::vec3(2.0f));
-	//glm::mat4 MoonModelMatrix = glm::translate(glm::vec3(MoonX, 0, MoonY)) * glm::rotate(spin(0.001), glm::vec3(0, 1, 0)) * glm::scale(glm::vec3(0.25f));
 
 	drawObjectTexture(&sphereModel, SunModelMatrix, textureSun);
 	drawObjectTexture(&sphereModel, MerkuryModelMatrix, textureMerkury);
