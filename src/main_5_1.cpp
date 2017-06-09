@@ -12,6 +12,7 @@
 
 GLuint programColor;
 GLuint programTexture;
+GLuint programTexture2;
 GLuint textureEarth;
 GLuint textureSun;
 GLuint textureMerkury;
@@ -22,6 +23,7 @@ GLuint textureMoon;
 GLuint textureSaturn;
 GLuint textureUranus;
 GLuint textureNeptune;
+GLuint textureSpace;
 
 Core::Shader_Loader shaderLoader;
 
@@ -120,7 +122,23 @@ void drawObjectTexture(obj::Model * model, glm::mat4 modelMatrix, GLuint tex)
 
 	glUseProgram(0);
 }
+void drawObjectTexture2(obj::Model * model, glm::mat4 modelMatrix, GLuint tex)
+{
+	GLuint program = programTexture2;
 
+	glUseProgram(program);
+
+	//tex = textureGrid;
+	Core::SetActiveTexture(tex, "uni", program, 0);
+
+	glm::mat4 transformation = perspectiveMatrix * cameraMatrix * modelMatrix;
+	glUniformMatrix4fv(glGetUniformLocation(program, "modelViewProjectionMatrix"), 1, GL_FALSE, (float*)&transformation);
+	glUniformMatrix4fv(glGetUniformLocation(program, "modelMatrix"), 1, GL_FALSE, (float*)&modelMatrix);
+
+	Core::DrawModel(model);
+
+	glUseProgram(0);
+}
 
 void renderScene()
 {
@@ -165,6 +183,7 @@ void renderScene()
 	glm::mat4 SaturnRingModelMatrix2 = glm::translate(saturnRing2XYZ) * glm::translate(saturnXYZ) * glm::translate(sunXYZ) * glm::rotate(time * 40, glm::vec3(0, 1, 0)) * glm::scale(glm::vec3(1.0f, 0.1f, 1.0f));
 	glm::mat4 UranusModelMatrix = glm::translate(uranusXYZ) * glm::translate(sunXYZ) * glm::rotate(time * 30, glm::vec3(0, 1, 0)) * glm::scale(glm::vec3(1.5f));
 	glm::mat4 NeptuneModelMatrix = glm::translate(neptuneXYZ) * glm::translate(sunXYZ) * glm::rotate(time * 30, glm::vec3(0, 1, 0)) * glm::scale(glm::vec3(1.5f));
+	glm::mat4 SpaceModelMatrix = glm::translate(glm::vec3(0,0,0))* glm::rotate(time*0.1f, glm::vec3(0, 1, 0))* glm::scale(glm::vec3(500.0f));
 
 	drawObjectTexture(&sphereModel, SunModelMatrix, textureSun);
 	drawObjectTexture(&sphereModel, MerkuryModelMatrix, textureMerkury);
@@ -177,6 +196,8 @@ void renderScene()
 	drawObjectTexture(&sphereModel, SaturnRingModelMatrix, textureSaturn);
 	drawObjectTexture(&sphereModel, SaturnRingModelMatrix2, textureSaturn);
 	drawObjectTexture(&sphereModel, UranusModelMatrix, textureUranus);
+	drawObjectTexture2(&sphereModel, SpaceModelMatrix, textureSpace);
+
 	drawObjectTexture(&sphereModel, NeptuneModelMatrix, textureNeptune);
 
 
@@ -188,6 +209,7 @@ void init()
 	glEnable(GL_DEPTH_TEST);
 	programColor = shaderLoader.CreateProgram("shaders/shader_color.vert", "shaders/shader_color.frag");
 	programTexture = shaderLoader.CreateProgram("shaders/shader_tex.vert", "shaders/shader_tex.frag");
+	programTexture2 = shaderLoader.CreateProgram("shaders/shader_tex2.vert", "shaders/shader_tex2.frag");
 	sphereModel = obj::loadModelFromFile("models/sphere.obj");
 	shipModel = obj::loadModelFromFile("models/statek.obj");
 	textureSun = Core::LoadTexture("textures/sun.png");
@@ -200,6 +222,7 @@ void init()
 	textureSaturn = Core::LoadTexture("textures/saturn.png");
 	textureUranus = Core::LoadTexture("textures/uranus.png");
 	textureNeptune = Core::LoadTexture("textures/neptune.png");
+	textureSpace = Core::LoadTexture("textures/space.png");
 }
 
 void shutdown()
