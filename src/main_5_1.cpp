@@ -64,25 +64,25 @@ void keyboard(unsigned char key, int x, int y)
 	{
 
 		
-		case 'z': cameraAngle -= angleSpeed; break;
-		case 'x': cameraAngle += angleSpeed; break;
-		case 'q': cameraPos -= angleSpeed; break;
-		case 'e': cameraPos += angleSpeed; break;
-		case 'w': cameraPos += cameraDir * moveSpeed; break;
-		case 's': cameraPos -= cameraDir * moveSpeed; break;
-		case 'd': cameraPos += glm::cross(cameraDir, glm::vec3(0, 1, 0)) * moveSpeed; break;
-		case 'a': cameraPos -= glm::cross(cameraDir, glm::vec3(0, 1, 0)) * moveSpeed; break;
-		case 'p': cameraPos += glm::cross(cameraDir, glm::vec3(1, 0, 1)) * moveSpeed; break;
-		case 'o': cameraPos -= glm::cross(cameraDir, glm::vec3(1, 0, 1)) * moveSpeed; break;
-		case 't': cameraMove -= time; break;
-		case 'y': cameraMove += time; break;
-		case 'c': cameraRotate += angleSpeed; break;
-		case 'v': cameraRotate -= angleSpeed; break;
-		case 'u': a = 1; break;
-		case 'k': if(i==0)if(b>-0.5f) b -= angleSpeed; break;
-		case 'i': if (i == 0)if(b<0.5f) b += angleSpeed; break;
-		case 'j': if (i == 0)if(c>-0.5f) c -= angleSpeed; break;
-		case 'l': if (i == 0)if(c<0.5f) c += angleSpeed; break;
+		case 'z': cameraAngle -= angleSpeed; break; //obrot w lewo
+		case 'x': cameraAngle += angleSpeed; break; //obrot w prawo
+		//case 'q': cameraPos -= angleSpeed; break; //dziala tak samo jak p/o
+		//case 'e': cameraPos += angleSpeed; break;
+		case 'w': cameraPos += cameraDir * moveSpeed; break; //lot do przodu
+		case 's': cameraPos -= cameraDir * moveSpeed; break; //lot do tylu
+		case 'd': cameraPos += glm::cross(cameraDir, glm::vec3(0, 1, 0)) * moveSpeed; break; //lot w lewo
+		case 'a': cameraPos -= glm::cross(cameraDir, glm::vec3(0, 1, 0)) * moveSpeed; break; //lot w prawo
+		case 'p': cameraPos += glm::cross(cameraDir, glm::vec3(1, 0, 1)) * moveSpeed; break; //lot w dol
+		case 'o': cameraPos -= glm::cross(cameraDir, glm::vec3(1, 0, 1)) * moveSpeed; break; //lot w gore 
+		case 't': cameraMove -= 0.1; break; //lot do tylu bez kamery
+		case 'y': cameraMove += 0.1; break; //lot do przodu bez kamery
+		//case 'c': cameraRotate += angleSpeed; break; //zakomentowalem bo psuje strzelanie
+		//case 'v': cameraRotate -= angleSpeed; break;
+		case 'u': a = 1; break; //strzal
+		case 'k': if(i==0)if(b>-0.5f) b -= angleSpeed; break; //dzialko w dol
+		case 'i': if (i == 0)if(b<0.5f) b += angleSpeed; break; //dzialko w gore
+		case 'j': if (i == 0)if(c>-0.5f) c -= angleSpeed; break; //dzialko w lewo
+		case 'l': if (i == 0)if(c<0.5f) c += angleSpeed; break; //dzialko w prawo
 
 	}
 }
@@ -181,15 +181,14 @@ void renderScene()
 	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 	// Macierz statku "przyczepia" go do kamery. Warto przeanalizowac te linijke i zrozumiec jak to dziala.
 	glm::mat4 shipModelMatrix = glm::translate(cameraPos + cameraMove*cameraDir * 0.5f + glm::vec3(0, -0.25f, 0)) * glm::rotate(-cameraAngle + cameraRotate + glm::radians(90.0f), glm::vec3(0, 1, 0)) * glm::scale(glm::vec3(0.001f));
-	//glm::mat4 shipModelMatrix2 = glm::translate(cameraPos + cameraMove*cameraDir * 0.5f + glm::vec3(0, -0.25f, 0))*glm::translate(cameraDir*time)* glm::rotate(-cameraAngle + cameraRotate + glm::radians(90.0f), glm::vec3(0, 1, 0)) * glm::scale(glm::vec3(0.001f));
 	drawObjectColor(&shipModel, shipModelMatrix, glm::vec3(0.6f));
 	if (a == 1 && i<500) {
-		glm::mat4 shipModelMatrix2 = glm::translate(cameraPos + cameraMove*cameraDir * 0.5f + glm::vec3(0, -0.25f, 0))*glm::translate((cameraDir+(glm::vec3(0.0f, sinf(b), sinf(c))))*(i/10))* glm::rotate(-cameraAngle + cameraRotate + glm::radians(90.0f), glm::vec3(0, 1, 0)) * glm::scale(glm::vec3(0.1f));
+		glm::mat4 shipModelMatrix2 = glm::translate(cameraPos + cameraMove*cameraDir * 0.5f + glm::vec3(0, -0.25f, 0))*glm::translate((cameraDir+(glm::vec3(0.0f, sinf(b), sinf(c))))*(i/10)*2)* glm::rotate(-cameraAngle + cameraRotate + glm::radians(90.0f), glm::vec3(0, 1, 0)) * glm::scale(glm::vec3(0.1f));
 		drawObjectColor(&sphereModel, shipModelMatrix2, glm::vec3(0.6f));
-		i++;
+			i++;
 	}
 	else {
-		a = 0;
+			a = 0;
 		i = 0;
 	}
 
@@ -207,7 +206,7 @@ void renderScene()
 	glm::mat4 NeptuneModelMatrix = glm::translate(neptuneXYZ) * glm::translate(sunXYZ) * glm::rotate(time * 30, glm::vec3(0, 1, 0)) * glm::scale(glm::vec3(1.5f));
 	glm::mat4 SpaceModelMatrix = glm::translate(glm::vec3(0,0,0))* glm::rotate(time*0.1f, glm::vec3(0, 1, 0))* glm::scale(glm::vec3(500.0f));
 
-	drawObjectTexture(&sphereModel, SunModelMatrix, textureSun);
+	drawObjectTexture2(&sphereModel, SunModelMatrix, textureSun);
 	drawObjectTexture(&sphereModel, MerkuryModelMatrix, textureMerkury);
 	drawObjectTexture(&sphereModel, VenusModelMatrix, textureVenus);
 	drawObjectTexture(&sphereModel, EarthModelMatrix, textureEarth);
