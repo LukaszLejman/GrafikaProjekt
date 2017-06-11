@@ -31,7 +31,6 @@ obj::Model shipModel;
 obj::Model sphereModel;
 float cameraMove = 1;
 float cameraAngle = 0;
-float b = 0;
 float cameraRotate = 0;
 glm::vec3 cameraPos = glm::vec3(-100, 0, 0);
 glm::vec3 cameraDir;
@@ -54,6 +53,8 @@ glm::vec3 neptuneXYZ;
 
 int a = 0;
 int i = 0;
+float c = 0;
+float b = 0;
 void keyboard(unsigned char key, int x, int y)
 {
 	float angleSpeed = 0.1f;
@@ -77,11 +78,12 @@ void keyboard(unsigned char key, int x, int y)
 		case 'y': cameraMove += time; break;
 		case 'c': cameraRotate += angleSpeed; break;
 		case 'v': cameraRotate -= angleSpeed; break;
-		case 'i': {
-			a = 1;
-		}
-		case 'k': b -= angleSpeed; break;
-		case 'l': b += angleSpeed; break;
+		case 'u': a = 1; break;
+		case 'k': if(i==0)if(b>-0.5f) b -= angleSpeed; break;
+		case 'i': if (i == 0)if(b<0.5f) b += angleSpeed; break;
+		case 'j': if (i == 0)if(c>-0.5f) c -= angleSpeed; break;
+		case 'l': if (i == 0)if(c<0.5f) c += angleSpeed; break;
+
 	}
 }
 
@@ -182,7 +184,7 @@ void renderScene()
 	//glm::mat4 shipModelMatrix2 = glm::translate(cameraPos + cameraMove*cameraDir * 0.5f + glm::vec3(0, -0.25f, 0))*glm::translate(cameraDir*time)* glm::rotate(-cameraAngle + cameraRotate + glm::radians(90.0f), glm::vec3(0, 1, 0)) * glm::scale(glm::vec3(0.001f));
 	drawObjectColor(&shipModel, shipModelMatrix, glm::vec3(0.6f));
 	if (a == 1 && i<500) {
-		glm::mat4 shipModelMatrix2 = glm::translate(cameraPos + cameraMove*cameraDir * 0.5f + glm::vec3(0, -0.25f, 0))*glm::translate(cameraDir*(i/10))* glm::rotate(-cameraAngle + cameraRotate + glm::radians(90.0f), glm::vec3(0, 1, 0))*glm::rotate(-b + cameraRotate + glm::radians(90.0f), glm::vec3(0, 1, 0)) * glm::scale(glm::vec3(0.1f));
+		glm::mat4 shipModelMatrix2 = glm::translate(cameraPos + cameraMove*cameraDir * 0.5f + glm::vec3(0, -0.25f, 0))*glm::translate((cameraDir+(glm::vec3(0.0f, sinf(b), sinf(c))))*(i/10))* glm::rotate(-cameraAngle + cameraRotate + glm::radians(90.0f), glm::vec3(0, 1, 0)) * glm::scale(glm::vec3(0.1f));
 		drawObjectColor(&sphereModel, shipModelMatrix2, glm::vec3(0.6f));
 		i++;
 	}
